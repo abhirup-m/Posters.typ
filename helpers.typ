@@ -1,4 +1,4 @@
-#let transparent = rgb(255, 255, 255, 0)
+#let transparent = rgb("ffffff00")
 #let separator() = { line(length: 100%,stroke: 0.3em + gradient.linear(transparent, blue, navy, blue, transparent)) }
 #let header(
   title: none,
@@ -10,7 +10,7 @@
 ) = {
   set par(leading: 0.4em, spacing: 0.5em)
   block(
-    height: 60pt,
+    height: 7.5%,
     outset: 0pt,
     inset: 0pt,
     grid(
@@ -29,3 +29,35 @@
   )
 }
 
+#let row(
+  boxes: (),
+  ratios: (),
+) = {
+  grid(
+    columns: ratios,
+    gutter: 1em,
+    ..boxes
+  )
+}
+
+#let chunk(
+  title: none,
+  layout: (),
+  widths: (),
+  ..content
+) = {
+  heading(title)
+  let rows = ()
+  for (i, r) in layout.enumerate() {
+    let cols = ()
+    for c in r {
+      cols.push(content.at(c - 1))
+    }
+    if cols.len() == 1 and cols.at(0).func() == image {
+      rows.push(grid(columns: widths.at(i), gutter: 0.8em, align: center + horizon, ..cols))
+    } else {
+      rows.push(grid(columns: widths.at(i), gutter: 0.8em, align: left + horizon, ..cols))
+    }
+  }
+  grid(rows: auto, gutter: 0.8em, align: horizon, ..rows)
+}
