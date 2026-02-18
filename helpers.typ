@@ -3,29 +3,26 @@
 #let header(
   title: none,
   subtitle: none,
-  logoLeft: none,
-  logoRight: none,
-  author: none,
+  logo: none,
+  firstAuthor: none,
+  reference: none,
+  otherAuthors: (),
   affiliation: none
 ) = {
-  set par(leading: 0.4em, spacing: 0.5em)
+  set par(leading: 0.8em, spacing: 1.5em)
   block(
-    height: 7.5%,
+    height: 9%,
     outset: 0pt,
     inset: 0pt,
     grid(
-      columns: (0.1fr, 0.8fr, 0.1fr),
-      gutter: 10pt,
-      align: (left + horizon, center + horizon, right + horizon),
-      image(logoLeft),
-      grid(
-        columns: (81%, 19%),
-        align: (left, right),
-        text(fill: rgb("003b81"), size: 2.1em, weight: 650, font: "Lato", title) + parbreak() + text(fill: rgb("252525"), size: 1.4em, weight: "black", font: "Lato", [\[#emph(subtitle)\]]), 
-        align(right, text(fill: rgb("6E260E"), size: 1.3em, weight: "bold", font: "Barlow", upper(author)) + parbreak() + text(fill: rgb("252525"), size: 1.2em, weight: "bold", font: "Barlow", [(#affiliation)]))
-      ),
-      image(logoRight),
+      columns: (0.7fr, 0.2fr, 0.1fr),
+      gutter: 2%,
+      align: (right + horizon, left + horizon, left + horizon),
+      par(leading: 1em, text(fill: rgb("003b81"), size: 2.5em, weight: "bold", font: "Yanone Kaffeesatz", title)),
+      par(leading: 0.5em, text(fill: rgb("252525"), size: 1.3em, weight: "regular", font: "oswald", subtitle)),
+      logo,
     )
+    + v(-1.5em) + box(fill: rgb("003b81"), radius: 1pt, inset: 0.5em, text(fill: white, size: 1.2em, font: "oswald", reference)) + h(1fr) + if affiliation != none { text(fill: rgb("252525"), size: 1.2em, weight: "bold", font: "Barlow", affiliation) + h(1fr)} + text(fill: rgb("36454F"), size: 1.2em, weight: "medium", font: "Oswald", upper(firstAuthor)) + [, ] + text(fill: rgb("36454F"), size: 1.2em, font: "oswald", weight: "regular", otherAuthors.join(", "))
   )
 }
 
@@ -46,7 +43,7 @@
   widths: (),
   ..content
 ) = {
-  heading(title)
+  align(center, heading(title))
   let rows = ()
   for (i, r) in layout.enumerate() {
     let cols = ()
@@ -59,5 +56,5 @@
       rows.push(grid(columns: widths.at(i), gutter: 0.8em, align: left + horizon, ..cols))
     }
   }
-  grid(rows: auto, gutter: 0.8em, align: horizon, ..rows)
+  grid(rows: auto, gutter: 1.5em, align: horizon, ..rows)
 }
